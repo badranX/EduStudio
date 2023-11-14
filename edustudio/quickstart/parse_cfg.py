@@ -31,6 +31,7 @@ def get_global_cfg(
     Returns:
         UnifyConfig: the global config object
     """
+    print("BADX: ", cfg_file_name)
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', '-dt', type=str,
                         help='dataset name', dest='dataset', default=dataset)
@@ -52,6 +53,7 @@ def get_global_cfg(
                         dest='mid2cache_op_seq', default=datatpl_cfg_dict.get('mid2cache_op_seq', None))   
     args, unknown_args = parser.parse_known_args()
     assert args.dataset is not None
+    print("BADX: ", args.cfg_file_name)
     
     unknown_arg_dict = defaultdict(dict)
     if len(unknown_args) > 0:
@@ -76,6 +78,7 @@ def get_global_cfg(
                 # raise ValueError(f"unsupported key: {key}")
 
 
+    print("BADX: ", args.cfg_file_name)
     cfg = UnifyConfig({
         'traintpl_cfg': UnifyConfig(), 'datatpl_cfg': UnifyConfig(),
         'modeltpl_cfg': UnifyConfig(), 'evaltpl_cfg': UnifyConfig(), 
@@ -101,6 +104,7 @@ def get_global_cfg(
     modeltpl_cls = args.modeltpl_cls
     evaltpl_clses = args.evaltpl_clses
     if args.cfg_file_name is not None:
+        print("BADX: ", args.cfg_file_name)
         yaml_cfg = UnifyConfig.from_yml_file(
             f"{cfg.frame_cfg['CFG_FOLDER_PATH']}/{cfg.dataset}/{args.cfg_file_name}"
         )
