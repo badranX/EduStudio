@@ -27,11 +27,13 @@ class M2C_GenUnFoldCptSeq(BaseMid2Cache):
 
         if not self.is_dataset_divided:
             assert df_train is None and df_valid is None and df_test is None
+            max_cpts_len = df_exer['cpt_seq:token_seq'].apply(len).max()
             unique_cpt_seq = df_exer['cpt_seq:token_seq'].explode().unique()
             cpt_map = dict(zip(unique_cpt_seq, range(len(unique_cpt_seq))))
             df_Q_unfold = pd.DataFrame({
                 'exer_id:token': df_exer['exer_id:token'].repeat(df_exer['cpt_seq:token_seq'].apply(len)),
-                'cpt_unfold:token': df_exer['cpt_seq:token_seq'].explode().replace(cpt_map)
+                'cpt_unfold:token': df_exer['cpt_seq:token_seq'].explode().replace(cpt_map),
+                'is_last_cpt:token': df_exer['cpt_seq:token_seq'].apply(lambda x: [0]*(len(x)-1) + [1]).explode()
             })
             df = pd.merge(df, df_Q_unfold, on=['exer_id:token'], how='left').reset_index(drop=True)
             kwargs['df'] = df
